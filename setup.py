@@ -16,4 +16,13 @@ setup(
     author='Jace Xu',
     author_email='jace@xuh.me',
     description='Python Wrapper for AutoIt v3',
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Environment :: Win32 (MS Windows)",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: Microsoft :: Windows",
+        "Programming Language :: Python",
+        "Topic :: Software Development :: Testing"
+    ]
 )
