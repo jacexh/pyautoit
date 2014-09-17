@@ -4,18 +4,20 @@ __author__ = 'Jace Xu'
 
 from autoit import AUTO_IT
 from autoit import error
-from autoit import WindowError
+from autoit import WindowError, TimeoutError
 from ctypes.wintypes import *
 from ctypes import create_unicode_buffer, byref
+from autoit import properties
 
 
-def win_activate(title, text=""):
+def win_activate(title, **kwargs):
     """
     Activates (gives focus to) a window.
     :param title:
     :param text:
     :return:
     """
+    text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinActivate(LPCWSTR(title), LPCWSTR(text))
     if ret == 0:
         raise WindowError(
@@ -37,13 +39,14 @@ def win_activate_by_handle(handle):
     return ret
 
 
-def win_active(title, text=""):
+def win_active(title, **kwargs):
     """
 
     :param title:
     :param text:
     :return:
     """
+    text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinActive(LPCWSTR(title), LPCWSTR(text))
     return ret
 
@@ -58,13 +61,14 @@ def win_active_by_handle(handle):
     return ret
 
 
-def win_close(title, text=""):
+def win_close(title, **kwargs):
     """
 
     :param title:
     :param text:
     :return:
     """
+    text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinClose(LPCWSTR(title), LPCWSTR(text))
     if ret == 0:
         raise WindowError(
@@ -86,13 +90,14 @@ def win_close_by_handle(handle):
     return ret
 
 
-def win_exists(title, text=""):
+def win_exists(title, **kwargs):
     """
     Checks to see if a specified window exists.
     :param title: The title of the window to check.
     :param text: The text of the window to check.
     :return: Returns 1 if the window exists, otherwise returns 0.
     """
+    text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinExists(LPCWSTR(title), LPCWSTR(text))
     return ret
 
@@ -119,7 +124,7 @@ def win_get_caret_pos():
     return p.x, p.y
 
 
-def win_get_class_list(title, text="", buf_size=200):
+def win_get_class_list(title, buf_size=200, **kwargs):
     """
 
     :param title:
@@ -127,6 +132,7 @@ def win_get_class_list(title, text="", buf_size=200):
     :param buf_size:
     :return:
     """
+    text = kwargs.get("text", "")
     rec_text = create_unicode_buffer(buf_size)  # ...
     AUTO_IT.AU3_WinGetClassList(LPCWSTR(title), LPCWSTR(text),
                                 rec_text, INT(buf_size))
@@ -150,13 +156,14 @@ def win_get_class_list_by_handle(handle, buf_size=200):
     return msg
 
 
-def win_get_client_size(title, text=""):
+def win_get_client_size(title, **kwargs):
     """
 
     :param title:
     :param text:
     :return:
     """
+    text = kwargs.get("text", "")
     rect = RECT()
 
     ret = AUTO_IT.AU3_WinGetClientSize(LPCWSTR(title), LPCWSTR(text),
@@ -180,20 +187,21 @@ def win_get_client_size_by_handle(handle):
     return rect.right, rect.bottom
 
 
-def win_get_handle(title, text=""):
+def win_get_handle(title, **kwargs):
     """
 
     :param title:
     :param text:
     :return:
     """
+    text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinGetHandle(LPCWSTR(title), LPCWSTR(text))
     if ret == 0 and error() == 1:
         raise WindowError("No window match the criteria")
     return ret
 
 
-def win_get_handle_as_text(title, text="", buf_size=16):
+def win_get_handle_as_text(title, buf_size=16, **kwargs):
     """
 
     :param title:
@@ -201,6 +209,7 @@ def win_get_handle_as_text(title, text="", buf_size=16):
     :param buf_size:
     :return:
     """
+    text = kwargs.get("text", "")
     rec_text = create_unicode_buffer(buf_size)
     AUTO_IT.AU3_WinGetHandleAsText(LPCWSTR(title), LPCWSTR(text),
                                    rec_text, INT(buf_size))
@@ -210,13 +219,14 @@ def win_get_handle_as_text(title, text="", buf_size=16):
     return msg
 
 
-def win_get_pos(title, text=""):
+def win_get_pos(title, **kwargs):
     """
 
     :param title:
     :param text:
     :return:
     """
+    text = kwargs.get("text", "")
     rect = RECT()
     res = AUTO_IT.AU3_WinGetPos(LPCWSTR(title), LPCWSTR(text), byref(rect))
     if res == 1:
@@ -237,13 +247,14 @@ def win_get_pos_by_handle(handle):
     return rect.left, rect.top, rect.right, rect.bottom
 
 
-def win_get_process(title, text=""):
+def win_get_process(title, **kwargs):
     """
 
     :param title:
     :param text:
     :return:
     """
+    text = kwargs.get("text", "")
     res = AUTO_IT.AU3_WinGetProcess(LPCWSTR(title), LPCWSTR(text))
     if res == -1:
         raise WindowError(
@@ -265,7 +276,7 @@ def win_get_process_by_handle(handle):
     return res
 
 
-def win_get_state(title, text=""):
+def win_get_state(title, **kwargs):
     """
     Retrieves the state of a given window.
     :param title:
@@ -278,6 +289,7 @@ def win_get_state(title, text=""):
     16 = Window is minimized
     32 = Windows is maximized
     """
+    text = kwargs.get("text", "")
     res = AUTO_IT.AU3_WinGetState(LPCWSTR(title), LPCWSTR(text))
     if res == 0:
         raise WindowError(
@@ -299,7 +311,7 @@ def win_get_state_by_handle(handle):
     return res
 
 
-def win_get_text(title, text="", buf_size=256):
+def win_get_text(title, buf_size=256, **kwargs):
     """
 
     :param title:
@@ -307,6 +319,7 @@ def win_get_text(title, text="", buf_size=256):
     :param buf_size:
     :return:
     """
+    text = kwargs.get("text", "")
     ret_text = create_unicode_buffer(buf_size)
     AUTO_IT.AU3_WinGetText(LPCWSTR(title), LPCWSTR(text), ret_text,
                            INT(buf_size))
@@ -325,13 +338,14 @@ def win_get_text_by_handle(handle, buf_size=256):
     return ret_text.value.rstrip()
 
 
-def win_get_title(title, text="", buf_size=256):
+def win_get_title(title, buf_size=256, **kwargs):
     """
 
     :param title:
     :param text:
     :return:
     """
+    text = kwargs.get("text", "")
     ret_text = create_unicode_buffer(buf_size)
     AUTO_IT.AU3_WinGetTitle(LPCWSTR(title), LPCWSTR(text), ret_text,
                             INT(buf_size))
@@ -350,3 +364,365 @@ def win_get_title_by_handle(handle, buf_size=256):
     AUTO_IT.AU3_WinGetTitleByHandle(HWND(handle), ret_text, INT(buf_size))
     val = ret_text.value.rstrip()
     return val
+
+
+def win_kill(title, **kwargs):
+    """
+
+    :param title:
+    :param text:
+    :return:
+    """
+    text = kwargs.get("text", "")
+    ret = AUTO_IT.AU3_WinKill(LPCWSTR(title), LPCWSTR(text))
+    if ret == 0:
+        raise WindowError("kill window failed")
+    return ret
+
+
+def win_kill_by_handle(handle):
+    """
+
+    :param handle:
+    :return:
+    """
+    ret = AUTO_IT.AU3_WinKillByHandle(HWND(handle))
+    if ret == 0:
+        raise WindowError("kill window failed")
+    return ret
+
+
+def win_menu_select_item(title, *items, **kwargs):
+    """
+    Usage:
+        win_menu_select_item("[CLASS:Notepad]", "", u"文件(&F)", u"退出(&X)")
+    :param title:
+    :param text:
+    :param items:
+    :return:
+    """
+    text = kwargs.get("text", "")
+    if not (0 < len(items) < 8):
+        raise ValueError("accepted none item or number of items exceed eight")
+    f_items = [LPCWSTR(item) for item in items]
+    for i in xrange(8 - len(f_items)):
+        f_items.append(LPCWSTR(""))
+
+    ret = AUTO_IT.AU3_WinMenuSelectItem(LPCWSTR(title), LPCWSTR(text),
+                                        *f_items)
+
+    if ret == 0:
+        raise WindowError("the menu item could not be found")
+    return ret
+
+
+def win_menu_select_item_by_handle(handle, *items):
+    """
+
+    :param handle:
+    :param items:
+    :return:
+    """
+    if not (0 < len(items) < 8):
+        raise ValueError("accepted none item or number of items exceed eight")
+    f_items = [LPCWSTR(item) for item in items]
+    for i in xrange(8 - len(f_items)):
+        f_items.append(LPCWSTR(""))
+
+    ret = AUTO_IT.AU3_WinMenuSelectItemByHandle(HWND(handle), *f_items)
+    if ret == 0:
+        raise WindowError("the menu item could not be found")
+    return ret
+
+
+def win_minimize_all():
+    """
+
+    :return:
+    """
+    AUTO_IT.AU3_WinMinimizeAll()
+
+
+def win_minimize_all_undo():
+    """
+
+    :return:
+    """
+    AUTO_IT.AU3_WinMinimizeAllUndo()
+
+
+def win_move(title, x, y, width=-1, height=-1, **kwargs):
+    """
+
+    :param title:
+    :param text:
+    :param x:
+    :param y:
+    :param width:
+    :param height:
+    :return:
+    """
+    text = kwargs.get("text", "")
+    ret = AUTO_IT.AU3_WinMove(LPCWSTR(title), LPCWSTR(text), INT(x), INT(y),
+                              INT(width), INT(height))
+    if ret == 0:
+        raise WindowError("No window match the criteria")
+    return ret
+
+
+def win_move_by_handle(handle, x, y, width=-1, height=-1):
+    """
+
+    :param handle:
+    :param x:
+    :param y:
+    :param width:
+    :param height:
+    :return:
+    """
+    ret = AUTO_IT.AU3_WinMoveByHandle(HWND(handle), INT(x), INT(y), INT(width),
+                                      INT(height))
+    if ret == 0:
+        raise WindowError("No window match the handle: %d" % handle)
+    return ret
+
+
+def win_set_on_top(title, flag=1, **kwargs):
+    """
+
+    :param title:
+    :param flag: 1=set on top flag, 0 = remove on top flag
+    :param kwargs:
+    :return:
+    """
+    text = kwargs.get("text", "")
+
+    ret = AUTO_IT.AU3_WinSetOnTop(LPCWSTR(title), LPCWSTR(text), INT(flag))
+    if ret == 0:
+        raise WindowError("No window match the criteria")
+    return ret
+
+
+def win_set_on_top_by_handle(handle, flag=1):
+    """
+
+    :param handle:
+    :param flag:
+    :return:
+    """
+    ret = AUTO_IT.AU3_WinSetOnTopByHandle(HWND(handle), INT(flag))
+    if ret == 0:
+        raise WindowError("No window match the handle: %d" % handle)
+    return ret
+
+
+def win_set_state(title, flag=properties.SW_SHOW, **kwargs):
+    """
+
+    :param title:
+    :param flag: The "show" flag of the executed program:
+        SW_HIDE = Hide window
+        SW_SHOW = Shows a previously hidden window
+        SW_MINIMIZE = Minimize window
+        SW_MAXIMIZE = Maximize window
+        SW_RESTORE = Undoes a window minimization or maximization
+    :param kwargs:
+    :return:
+    """
+    text = kwargs.get("text", "")
+
+    ret = AUTO_IT.AU3_WinSetState(LPCWSTR(title), LPCWSTR(text), INT(flag))
+    if ret == 0:
+        raise WindowError("No window match the criteria")
+    return ret
+
+
+def win_set_state_by_handle(handle, flag=properties.SW_SHOW):
+    """
+
+    :param handle:
+    :param flag:
+    :return:
+    """
+    ret = AUTO_IT.AU3_WinSetStateByHandle(HWND(handle), INT(flag))
+    if ret == 0:
+        raise WindowError("No window match the handle: %d" % handle)
+    return ret
+
+
+def win_set_title(title, new_title, **kwargs):
+    """
+
+    :param title:
+    :param new_title:
+    :param kwargs:
+    :return:
+    """
+    text = kwargs.get("text", "")
+    ret = AUTO_IT.AU3_WinSetTitle(LPCWSTR(title), LPCWSTR(text),
+                                  LPCWSTR(new_title))
+    if ret == 0:
+        raise WindowError("set new title failed, "
+                          "the matched window not be found")
+    return ret
+
+
+def win_set_title_by_handle(handle, new_title):
+    """
+
+    :param handle:
+    :param new_title:
+    :return:
+    """
+    ret = AUTO_IT.AU3_WinSetTitleByHandle(HWND(handle), LPCWSTR(new_title))
+    if ret == 0:
+        raise WindowError("set new title failed, no window match the"
+                          " handle: %d" % handle)
+    return ret
+
+
+def win_set_trans(title, trans, **kwargs):
+    """
+    Sets the transparency of a window.
+    :param title:
+    :param trans: A number in the range 0 - 255. The larger the number,
+        the more transparent the window will become.
+    :param kwargs:
+    :return:
+    """
+    text = kwargs.get("text", "")
+
+    ret = AUTO_IT.AU3_WinSetTrans(LPCWSTR(title), LPCWSTR(text), INT(trans))
+    if ret == 0:
+        raise WindowError("No window match the criteria")
+    return ret
+
+
+def win_set_trans_by_handle(handle, trans):
+    """
+
+    :param handle:
+    :param trans:
+    :return:
+    """
+    ret = AUTO_IT.AU3_WinSetTransByHandle(HWND(handle), INT(trans))
+    if ret == 0:
+        raise WindowError("No window match the handle: %d" % handle)
+    return ret
+
+
+def win_wait(title, timeout=0, **kwargs):
+    """
+
+    :param title:
+    :param timeout:
+    :param kwargs:
+    :return:
+    """
+    text = kwargs.get("text", "")
+
+    ret = AUTO_IT.AU3_WinWait(LPCWSTR(title), LPCWSTR(text), INT(timeout))
+    if ret == 0:
+        raise TimeoutError("timeout on wait for window exists")
+    return ret
+
+
+def win_wait_by_handle(handle, timeout):
+    """
+
+    :param handle:
+    :param timeout:
+    :return:
+    """
+    ret = AUTO_IT.AU3_WinWaitByHandle(HWND(handle), INT(timeout))
+    if ret == 0:
+        raise TimeoutError("timeout on wait for window exists")
+    return ret
+
+
+def win_wait_active(title, timeout=0, **kwargs):
+    """
+
+    :param title:
+    :param timeout:
+    :param kwargs:
+    :return:
+    """
+    text = kwargs.get("text", "")
+
+    ret = AUTO_IT.AU3_WinWaitActive(LPCWSTR(title), LPCWSTR(text),
+                                    INT(timeout))
+    if ret == 0:
+        raise TimeoutError("timeout on wait for activate window")
+    return ret
+
+
+def win_wait_active_by_handle(handle, timeout):
+    """
+
+    :param handle:
+    :param timeout:
+    :return:
+    """
+    ret = AUTO_IT.AU3_WinWaitActiveByHandle(HWND(handle), INT(timeout))
+    if ret == 0:
+        raise TimeoutError("timeout on wait for activate window")
+    return ret
+
+
+def win_wait_close(title, timeout=0, **kwargs):
+    """
+
+    :param title:
+    :param timeout:
+    :param kwargs:
+    :return:
+    """
+    text = kwargs.get("text", "")
+    ret = AUTO_IT.AU3_WinWaitClose(LPCWSTR(title), LPCWSTR(text), INT(timeout))
+    if ret == 0:
+        raise TimeoutError("timeout on wait for close window")
+    return ret
+
+
+def win_wait_close_by_handle(handle, timeout):
+    """
+
+    :param handle:
+    :param timeout:
+    :return:
+    """
+    ret = AUTO_IT.AU3_WinWaitActiveByHandle(HWND(handle), INT(timeout))
+    if ret == 0:
+        raise TimeoutError("timeout on wait for close window")
+    return ret
+
+
+def win_wait_not_active(title, timeout=0, **kwargs):
+    """
+
+    :param title:
+    :param timeout:
+    :param kwargs:
+    :return:
+    """
+    text = kwargs.get("text", "")
+
+    ret = AUTO_IT.AU3_WinWaitNotActive(LPCWSTR(title), LPCWSTR(text),
+                                       INT(timeout))
+    if ret == 0:
+        raise TimeoutError("timeout on wait for deactivate window")
+    return ret
+
+
+def win_wait_not_active_by_handle(handle, timeout):
+    """
+
+    :param handle:
+    :param timeout:
+    :return:
+    """
+    ret = AUTO_IT.AU3_WinWaitNotActiveByHandle(HWND(handle), INT(timeout))
+    if ret == 0:
+        raise TimeoutError("timeout on wait for deactivate window")
+    return ret
