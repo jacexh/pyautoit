@@ -39,7 +39,7 @@ class WindowError(Exception):
     pass
 
 
-def get_error():
+def error():
     return AUTO_IT.AU3_error()
 
 
@@ -226,4 +226,5 @@ class _Options(object):
         auto_it_set_option("WinWaitDelay", value)
         self._win_wait_delay = value
 
-Options = _Options()
+options = _Options()
+properties = Properties

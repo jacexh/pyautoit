@@ -3,10 +3,14 @@
 __author__ = 'Jace Xu'
 
 from autoit import AUTO_IT
-from autoit import get_error
+from autoit import error
 from autoit import Properties
 from autoit import TimeoutError, ProcessError
 from ctypes.wintypes import *
+
+__all__ = ['run_wait', 'run_as', 'run', 'process_exists', 'process_close',
+           'process_set_priority', 'process_wait', 'process_wait_close',
+           'shutdown', 'run_as_wait']
 
 
 def run(filename, work_dir="", show_flag=Properties.SW_SHOWNORMAL):
@@ -19,7 +23,7 @@ def run(filename, work_dir="", show_flag=Properties.SW_SHOWNORMAL):
     """
     ret = AUTO_IT.AU3_Run(LPCWSTR(filename), LPCWSTR(work_dir),
                           INT(show_flag))
-    if get_error() == 1:
+    if error() == 1:
         raise ProcessError("start %s failed" % filename)
     return ret
 
@@ -34,7 +38,7 @@ def run_wait(filename, work_dir="", show_flag=Properties.SW_SHOWNORMAL):
     """
     ret = AUTO_IT.AU3_RunWait(LPCWSTR(filename), LPCWSTR(work_dir),
                               INT(show_flag))
-    if get_error() == 1:
+    if error() == 1:
         raise ProcessError("start %s failed" % filename)
     return ret
 
@@ -72,9 +76,9 @@ def process_set_priority(process, priority):
     """
     ret = AUTO_IT.AU3_ProcessSetPriority(LPCWSTR(process), INT(priority))
     if ret == 0:
-        if get_error() == 1:
+        if error() == 1:
             raise ProcessError("set priority failed")
-        elif get_error() == 2:
+        elif error() == 2:
             raise ProcessError("unsupported priority class be used")
     return ret
 
@@ -126,7 +130,7 @@ def run_as(user, domain, password, filename, logon_flag=1, work_dir="",
         LPCWSTR(user), LPCWSTR(domain), LPCWSTR(password), INT(logon_flag),
         LPCWSTR(filename), LPCWSTR(work_dir), INT(show_flag)
     )
-    if get_error() == 1:
+    if error() == 1:
         raise ProcessError("run an external program failed")
     return ret
 
@@ -152,7 +156,7 @@ def run_as_wait(user, domain, password, filename, logon_flag=1, work_dir="",
         LPCWSTR(user), LPCWSTR(domain), LPCWSTR(password), INT(logon_flag),
         LPCWSTR(filename), LPCWSTR(work_dir), INT(show_flag)
     )
-    if get_error() == 1:
+    if error() == 1:
         raise ProcessError("run an external program failed")
     return ret
 

@@ -3,7 +3,7 @@
 __author__ = 'Jace Xu'
 
 from autoit import AUTO_IT
-from autoit import get_error
+from autoit import error
 from autoit import WindowError
 from ctypes.wintypes import *
 from ctypes import create_unicode_buffer, byref
@@ -114,7 +114,7 @@ def win_get_caret_pos():
     """
     p = POINT()
     AUTO_IT.AU3_WinGetCaretPos(byref(p))
-    if get_error() == 1:
+    if error() == 1:
         raise WindowError("get the coordinates of the caret failed")
     return p.x, p.y
 
@@ -188,7 +188,7 @@ def win_get_handle(title, text=""):
     :return:
     """
     ret = AUTO_IT.AU3_WinGetHandle(LPCWSTR(title), LPCWSTR(text))
-    if ret == 0 and get_error() == 1:
+    if ret == 0 and error() == 1:
         raise WindowError("No window match the criteria")
     return ret
 
@@ -204,7 +204,7 @@ def win_get_handle_as_text(title, text="", buf_size=16):
     rec_text = create_unicode_buffer(buf_size)
     AUTO_IT.AU3_WinGetHandleAsText(LPCWSTR(title), LPCWSTR(text),
                                    rec_text, INT(buf_size))
-    if get_error() == 1:
+    if error() == 1:
         raise WindowError("No window match the criteria")
     msg = rec_text.value
     return msg
