@@ -8,10 +8,6 @@ from autoit import Properties
 from autoit import TimeoutError, ProcessError
 from ctypes.wintypes import *
 
-__all__ = ['run_wait', 'run_as', 'run', 'process_exists', 'process_close',
-           'process_set_priority', 'process_wait', 'process_wait_close',
-           'shutdown', 'run_as_wait']
-
 
 def run(filename, work_dir="", show_flag=Properties.SW_SHOWNORMAL):
     """
