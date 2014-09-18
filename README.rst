@@ -1,7 +1,7 @@
 PyAutoIt
 ========
 
-Python Wrapper for AutoIt v3
+Python binding for AutoItX3.dll
 
 Installing
 ~~~~~~~~~~
