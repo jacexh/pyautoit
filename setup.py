@@ -1,17 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#from distutils.core import setup
-from setuptools import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+
 import autoit
 
 setup(
     name='PyAutoIt',
     version=autoit.__version__,
     packages=['autoit'],
-    packages_data={'': ['lib\\AutoItX3.dll', 'lib\\AutoItX3_x64.dll']},
+    package_data={'': ['lib\\*.dll']},
     url='https://github.com/jacexh/pyautoit',
-    include_package_data=True,
     license='MIT',
     author='Jace Xu',
     author_email='jace@xuh.me',
