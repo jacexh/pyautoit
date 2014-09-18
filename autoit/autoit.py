@@ -43,6 +43,10 @@ class ControlError(Exception):
     pass
 
 
+class AutoItError(Exception):
+    pass
+
+
 def error():
     return AUTO_IT.AU3_error()
 
@@ -275,3 +279,281 @@ options = _Options()
 properties = Properties
 commands = Commands
 INTDEFAULT = -2147483647
+
+
+def clip_get(buf_size=256):
+    """
+
+    :param buf_size:
+    :return:
+    """
+
+    clip = ctypes.create_unicode_buffer(buf_size)
+    AUTO_IT.AU3_ClipGet(clip, INT(buf_size))
+
+    if error() == 1:
+        raise AutoItError("clipboard is empty or contains a non-text entry")
+    return clip.value.rstrip()
+
+
+def clip_put(value):
+    """
+
+    :param value:
+    :return:
+    """
+    ret = AUTO_IT.AU3_ClipPut(LPCWSTR(value))
+
+    if ret == 0:
+        raise AutoItError("Write text to clipboard failed")
+    return ret
+
+
+def is_admin():
+    """
+
+    :return:
+    """
+    ret = AUTO_IT.AU3_IsAdmin()
+    return ret
+
+
+def drive_map_add(device, share, flag=0, user="", pwd="", buf_size=256):
+    """
+
+    :param device:
+    :param share:
+    :param flag: 0 = default
+        1 = Persistant mapping
+        8 = Show authentication dialog if required
+    :param user:
+    :param pwd:
+    :param buf_size:
+    :return:
+    """
+    result = ctypes.create_unicode_buffer(buf_size)
+
+    err_code = {
+        1: "Undefined / Other error",
+        2: "Access to the remote share was denied",
+        3: "The device is already assigned",
+        4: "Invalid device name",
+        5: "Invalid remote share",
+        6: "Invalid password"
+    }
+    AUTO_IT.AU3_DriveMapAdd(
+        LPCWSTR(device), LPCWSTR(share), INT(flag), LPCWSTR(user),
+        LPCWSTR(pwd), result, INT(buf_size))
+
+    if error():
+        raise AutoItError(err_code.get(error(), None))
+    return result.value.rstrip()
+
+
+def drive_map_del(device):
+    """
+
+    :param device:
+    :return:
+    """
+    ret = AUTO_IT.AU3_DriveMapDel(LPCWSTR(device))
+    if ret == 0:
+        raise AutoItError("the disconnection was unsuccessful")
+    return ret
+
+
+def drive_map_get(device, buf_size=256):
+    """
+
+    :param device:
+    :param buf_size:
+    :return:
+    """
+    mapping = ctypes.create_unicode_buffer(buf_size)
+    AUTO_IT.AU3_DriveMapGet(LPCWSTR(device), mapping, INT(buf_size))
+
+    if error():
+        raise AutoItError("get the details of a mapped drive failed")
+    return mapping.value.rstrip()
+
+
+def mouse_click(button="left", x=INTDEFAULT, y=INTDEFAULT, clicks=1, speed=-1):
+    """
+
+    :param button:
+    :param x:
+    :param y:
+    :param clicks:
+    :param speed:
+    :return:
+    """
+    ret = AUTO_IT.AU3_MouseClick(
+        LPCWSTR(button), INT(x), INT(y), INT(clicks), INT(speed)
+    )
+    return ret
+
+
+def mouse_click_drag(x1, y1, x2, y2, button="left", speed=-1):
+    """
+
+    :param x1:
+    :param y1:
+    :param x2:
+    :param y2:
+    :param button:
+    :param speed:
+    :return:
+    """
+
+    ret = AUTO_IT.AU3_MouseClickDrag(
+        LPCWSTR(button), INT(x1), INT(y1), INT(x2), INT(y2), INT(speed)
+    )
+    return ret
+
+
+def mouse_down(button="left"):
+    """
+
+    :param button:
+    :return:
+    """
+    AUTO_IT.AU3_MouseDown(LPCWSTR(button))
+
+
+def mouse_get_cursor():
+    """
+
+    :return:
+    """
+    ret = AUTO_IT.AU3_MouseGetCursor()
+    return ret
+
+
+def mouse_get_pos():
+    """
+
+    :return:
+    """
+    p = POINT()
+    AUTO_IT.AU3_MouseGetPos(ctypes.byref(p))
+    return p.x, p.y
+
+
+def mouse_move(x, y, speed=-1):
+    """
+
+    :param x:
+    :param y:
+    :param speed:
+    :return:
+    """
+    ret = AUTO_IT.AU3_MouseMove(INT(x), INT(y), INT(speed))
+    return ret
+
+
+def mouse_up(button="left"):
+    """
+
+    :param button:
+    :return:
+    """
+    AUTO_IT.AU3_MouseUp(LPCWSTR(button))
+
+
+def mouse_wheel(direction, clicks=-1):
+    """
+
+    :param direction: "up" or "down"
+    :param clicks:
+    :return:
+    """
+    AUTO_IT.AU3_MouseWheel(LPCWSTR(direction), INT(clicks))
+
+    if error():
+        raise AutoItError("the direction is not recognized")
+
+
+def opt(option, value):
+    """
+
+    :param option:
+    :param value:
+    :return:
+    """
+    return auto_it_set_option(option, value)
+
+
+def pixel_checksum(left, top, right, bottom, step=1):
+    """
+
+    :param left:
+    :param top:
+    :param right:
+    :param bottom:
+    :param step:
+    :return:
+    """
+    rect = RECT(left, top, right, bottom)
+    ret = AUTO_IT.AU3_PixelChecksum(ctypes.byref(rect), INT(step))
+    return ret
+
+
+def pixel_get_color(x, y):
+    """
+
+    :param x:
+    :param y:
+    :return:
+    """
+    ret = AUTO_IT.AU3_PixelGetColor(INT(x), INT(y))
+    if ret == -1:
+        raise AutoItError("invalid coordinates")
+    return ret
+
+
+def pixel_search(left, top, right, bottom, col, var=1, step=1):
+    """
+
+    :param left:
+    :param top:
+    :param right:
+    :param bottom:
+    :param col:
+    :param var:
+    :param step:
+    :return:
+    """
+    p = POINT()
+    rect = RECT(left, top, right, bottom)
+
+    AUTO_IT.AU3_PixelSearch(
+        ctypes.byref(rect), INT(col), INT(var), INT(step), ctypes.byref(p)
+    )
+
+    if error():
+        raise AutoItError("color is not found")
+    return p.x, p.y
+
+
+def send(send_text, mode=0):
+    """
+    Sends simulated keystrokes to the active window.
+    :param send_text:
+    :param mode: Changes how "keys" is processed:
+        flag = 0 (default), Text contains special characters like + and ! to
+         indicate SHIFT and ALT key presses.
+        flag = 1, keys are sent raw.
+    :return:
+    """
+    AUTO_IT.AU3_Send(LPCWSTR(send_text), INT(mode))
+
+
+def tooltip(tip, x=INTDEFAULT, y=INTDEFAULT):
+    """
+
+    :param tip:
+    :param x:
+    :param y:
+    :return:
+    """
+    AUTO_IT.AU3_ToolTip(LPCWSTR(tip), INT(x), INT(y))

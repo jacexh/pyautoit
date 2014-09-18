@@ -3,7 +3,7 @@
 __author__ = 'Jace Xu'
 __version__ = "0.1"
 
-from .autoit import options, properties, error, commands
+from .autoit import options, properties, commands
 
 from .process import run
 from .process import run_wait
