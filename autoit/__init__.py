@@ -3,7 +3,7 @@
 __author__ = 'Jace Xu'
 __version__ = "0.1"
 
-from .autoit import options, properties, error
+from .autoit import options, properties, error, commands
 
 from .process import run
 from .process import run_wait
@@ -65,3 +65,38 @@ from .win import win_wait_close
 from .win import win_wait_close_by_handle
 from .win import win_wait_not_active
 from .win import win_wait_not_active_by_handle
+
+from .control import control_click
+from .control import control_click_by_handle
+from .control import control_command
+from .control import control_command_by_handle
+from .control import control_list_view
+from .control import control_list_view_by_handle
+from .control import control_disable
+from .control import control_disable_by_handle
+from .control import control_enable
+from .control import control_enable_by_handle
+from .control import control_focus
+from .control import control_focus_by_handle
+from .control import control_get_focus
+from .control import control_get_focus_by_handle
+from .control import control_get_handle
+from .control import control_get_handle_as_text
+from .control import control_get_pos
+from .control import control_get_pos_by_handle
+from .control import control_get_text
+from .control import control_get_text_by_handle
+from .control import control_hide
+from .control import control_hide_by_handle
+from .control import control_move
+from .control import control_move_by_handle
+from .control import control_send
+from .control import control_send_by_handle
+from .control import control_set_text
+from .control import control_set_text_by_handle
+from .control import control_show
+from .control import control_show_by_handle
+from .control import control_tree_view
+from .control import control_tree_view_by_handle
+from .control import statusbar_get_text
+from .control import statusbar_get_text_by_handle
