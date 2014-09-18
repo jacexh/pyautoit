@@ -7,6 +7,7 @@ except ImportError:
     from distutils.core import setup
 
 import autoit
+import os
 
 setup(
     name='PyAutoIt',
@@ -26,5 +27,6 @@ setup(
         "Operating System :: Microsoft :: Windows",
         "Programming Language :: Python",
         "Topic :: Software Development :: Testing"
-    ]
-)
+    ],
+    long_description=open(
+        os.path.join(os.path.dirname(__file__), "README.rst"), 'r').read())
