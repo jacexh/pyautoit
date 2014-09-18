@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'Jace Xu'
-__version__ = "0.2"
+__version__ = "0.2.1"
 
 from .autoit import options, properties, commands
 from .autoit import AutoItError, WindowError, ControlError, ProcessError

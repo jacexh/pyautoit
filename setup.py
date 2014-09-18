@@ -20,7 +20,7 @@ setup(
     author_email='jace@xuh.me',
     description='Python Wrapper for AutoIt v3',
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Environment :: Win32 (MS Windows)",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
