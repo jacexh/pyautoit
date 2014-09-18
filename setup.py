@@ -18,7 +18,7 @@ setup(
     license='MIT',
     author='Jace Xu',
     author_email='jace@xuh.me',
-    description='Python Wrapper for AutoIt v3',
+    description='Python binding for AutoItX3.dll',
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Win32 (MS Windows)",
