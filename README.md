@@ -20,8 +20,8 @@ python setup.py install
 ### Example
 
 - open notepad
-- type some string into notepad, eg: "hello world"
-- close notepad without saveing
+- type some string into notepad, eg: **"hello world"**
+- close notepad without saving
 
 ```python
 import autoit
