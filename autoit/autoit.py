@@ -39,6 +39,10 @@ class WindowError(Exception):
     pass
 
 
+class ControlError(Exception):
+    pass
+
+
 def error():
     return AUTO_IT.AU3_error()
 
@@ -226,5 +230,48 @@ class _Options(object):
         auto_it_set_option("WinWaitDelay", value)
         self._win_wait_delay = value
 
+
+class Commands(object):
+
+    is_visible = "IsVisible"
+    is_enabled = "IsEnabled"
+    show_drop_down = "ShowDropDown"
+    hide_drop_down = "HideDropDown"
+    add_string = "AddString"
+    del_string = "DelString"
+    find_string = "FindString"
+    set_current_selection = "SetCurrentSelection"
+    is_checked = "IsChecked"
+    check = "Check"
+    un_check = "UnCheck"
+    get_current_line = "GetCurrentLine"
+    get_current_col = "GetCurrentCol"
+    get_current_selection = "GetCurrentSelection"
+    get_line_count = "GetLineCount"
+    get_line = "GetLine"
+    get_selected = "GetSelected"
+    edit_paste = "EditPaste"
+    current_tab = "CurrentTab"
+    tab_right = "TabRight"
+    tab_left = "TabLeft"
+    de_select = "DeSelect"
+    find_item = "FindItem"
+    get_item_count = "GetItemCount"
+    get_selected_count = "GetSelectedCount"
+    get_sub_item_count = "GetSubItemCount"
+    get_text = "GetText"
+    is_selected = "IsSelected"
+    select = "Select"
+    select_all = "SelectAll"
+    select_clear = "SelectClear"
+    select_invert = "SelectInvert"
+    view_change = "View"
+    collapse = "Collapse"
+    exists = "Exists"
+    expand = "Expand"
+    uncheck = "Uncheck"
+
 options = _Options()
 properties = Properties
+commands = Commands
+INTDEFAULT = -2147483647
