@@ -7,13 +7,13 @@ Python Wrapper for AutoIt v3
 
 If you have pip on your system, you can simply install or upgrade PyAutoIt:
 
-```
+```python
 pip install -U pyautoit
 ```
 
 Alternately, you can download the source distribution from PyPI, unarchive it, and run:
 
-```
+```python
 python setup.py install
 ```
 
@@ -23,7 +23,7 @@ python setup.py install
 - type some string into notepad, eg: "hello world"
 - close notepad without saveing
 
-```
+```python
 import autoit
 
 autoit.run("notepad.exe")
