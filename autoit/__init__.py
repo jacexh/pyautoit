@@ -1,9 +1,33 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'Jace Xu'
-__version__ = "0.1"
+__version__ = "0.2"
 
 from .autoit import options, properties, commands
+from .autoit import AutoItError, WindowError, ControlError, ProcessError
+
+from .autoit import error
+from .autoit import auto_it_set_option
+from .autoit import clip_get
+from .autoit import clip_put
+from .autoit import is_admin
+from .autoit import drive_map_add
+from .autoit import drive_map_del
+from .autoit import drive_map_get
+from .autoit import mouse_click
+from .autoit import mouse_click_drag
+from .autoit import mouse_down
+from .autoit import mouse_get_cursor
+from .autoit import mouse_get_pos
+from .autoit import mouse_move
+from .autoit import mouse_up
+from .autoit import mouse_wheel
+from .autoit import opt
+from .autoit import pixel_checksum
+from .autoit import pixel_get_color
+from .autoit import pixel_search
+from .autoit import send
+from .autoit import tooltip
 
 from .process import run
 from .process import run_wait

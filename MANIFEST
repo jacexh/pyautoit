@@ -3,6 +3,7 @@ README.md
 setup.py
 autoit\__init__.py
 autoit\autoit.py
+autoit\control.py
 autoit\process.py
 autoit\win.py
 autoit\lib\AutoItX3.dll
