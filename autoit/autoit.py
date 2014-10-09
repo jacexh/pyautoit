@@ -23,26 +23,6 @@ if not os.path.exists(dll_path):
 AUTO_IT = ctypes.windll.LoadLibrary(dll_path)
 
 
-class ProcessError(Exception):
-    pass
-
-
-class TimeoutError(Exception):
-    pass
-
-
-class OptionError(Exception):
-    pass
-
-
-class WindowError(Exception):
-    pass
-
-
-class ControlError(Exception):
-    pass
-
-
 class AutoItError(Exception):
     pass
 

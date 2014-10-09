@@ -4,7 +4,7 @@ __author__ = 'Jace Xu'
 
 from autoit import AUTO_IT
 from autoit import error
-from autoit import WindowError, TimeoutError
+from autoit import AutoItError
 from ctypes.wintypes import *
 from ctypes import create_unicode_buffer, byref
 from autoit import properties
@@ -20,7 +20,7 @@ def win_activate(title, **kwargs):
     text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinActivate(LPCWSTR(title), LPCWSTR(text))
     if ret == 0:
-        raise WindowError(
+        raise AutoItError(
             "activate window failed, maybe the window does not exist")
     return ret
 
@@ -33,7 +33,7 @@ def win_activate_by_handle(handle):
     """
     ret = AUTO_IT.AU3_WinActivateByHandle(HWND(handle))
     if ret == 0:
-        raise WindowError(
+        raise AutoItError(
             "activate window by handle failed, maybe the window "
             "does not exist")
     return ret
@@ -71,7 +71,7 @@ def win_close(title, **kwargs):
     text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinClose(LPCWSTR(title), LPCWSTR(text))
     if ret == 0:
-        raise WindowError(
+        raise AutoItError(
             "close this window failed, maybe the window does not exist")
     return ret
 
@@ -84,7 +84,7 @@ def win_close_by_handle(handle):
     """
     ret = AUTO_IT.AU3_WinCloseByHandle(HWND(handle))
     if ret == 0:
-        raise WindowError(
+        raise AutoItError(
             "close window failed, maybe the window does not exist"
         )
     return ret
@@ -120,7 +120,7 @@ def win_get_caret_pos():
     p = POINT()
     AUTO_IT.AU3_WinGetCaretPos(byref(p))
     if error() == 1:
-        raise WindowError("get the coordinates of the caret failed")
+        raise AutoItError("get the coordinates of the caret failed")
     return p.x, p.y
 
 
@@ -169,7 +169,7 @@ def win_get_client_size(title, **kwargs):
     ret = AUTO_IT.AU3_WinGetClientSize(LPCWSTR(title), LPCWSTR(text),
                                        byref(rect))
     if ret == 1:
-        raise WindowError(
+        raise AutoItError(
             "get the size of client failed")
     return rect.right, rect.bottom
 
@@ -183,7 +183,7 @@ def win_get_client_size_by_handle(handle):
     rect = RECT()
     ret = AUTO_IT.AU3_WinGetClientSizeByHandle(HWND(handle), byref(rect))
     if ret == 1:
-        raise WindowError("get the size of client failed")
+        raise AutoItError("get the size of client failed")
     return rect.right, rect.bottom
 
 
@@ -197,7 +197,7 @@ def win_get_handle(title, **kwargs):
     text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinGetHandle(LPCWSTR(title), LPCWSTR(text))
     if ret == 0 and error() == 1:
-        raise WindowError("No window match the criteria")
+        raise AutoItError("No window match the criteria")
     return ret
 
 
@@ -214,7 +214,7 @@ def win_get_handle_as_text(title, buf_size=16, **kwargs):
     AUTO_IT.AU3_WinGetHandleAsText(LPCWSTR(title), LPCWSTR(text),
                                    rec_text, INT(buf_size))
     if error() == 1:
-        raise WindowError("No window match the criteria")
+        raise AutoItError("No window match the criteria")
     msg = rec_text.value
     return msg
 
@@ -230,7 +230,7 @@ def win_get_pos(title, **kwargs):
     rect = RECT()
     res = AUTO_IT.AU3_WinGetPos(LPCWSTR(title), LPCWSTR(text), byref(rect))
     if res == 1:
-        raise WindowError("No window match the criteria")
+        raise AutoItError("No window match the criteria")
     return rect.left, rect.top, rect.right, rect.bottom
 
 
@@ -243,7 +243,7 @@ def win_get_pos_by_handle(handle):
     rect = RECT()
     res = AUTO_IT.AU3_WinGetPosByHandle(HWND(handle), byref(rect))
     if res == 1:
-        raise WindowError("No window match the handle: %s" % str(handle))
+        raise AutoItError("No window match the handle: %s" % str(handle))
     return rect.left, rect.top, rect.right, rect.bottom
 
 
@@ -257,7 +257,7 @@ def win_get_process(title, **kwargs):
     text = kwargs.get("text", "")
     res = AUTO_IT.AU3_WinGetProcess(LPCWSTR(title), LPCWSTR(text))
     if res == -1:
-        raise WindowError(
+        raise AutoItError(
             "No window match the criteria: \n    Title: %s\n    Text: %s" %
             (str(title), str(text)))
     return res
@@ -271,7 +271,7 @@ def win_get_process_by_handle(handle):
     """
     res = AUTO_IT.AU3_WinGetProcessByHandle(HWND(handle))
     if res == -1:
-        raise WindowError(
+        raise AutoItError(
             "No window match the criteria:\n    Handle: %s" % str(handle))
     return res
 
@@ -292,7 +292,7 @@ def win_get_state(title, **kwargs):
     text = kwargs.get("text", "")
     res = AUTO_IT.AU3_WinGetState(LPCWSTR(title), LPCWSTR(text))
     if res == 0:
-        raise WindowError(
+        raise AutoItError(
             "No window match the criteria: \n    Title: %s\n    Text: %s" %
             (str(title), str(text)))
     return res
@@ -306,7 +306,7 @@ def win_get_state_by_handle(handle):
     """
     res = AUTO_IT.AU3_WinGetStateByHandle(HWND(handle))
     if res == 0:
-        raise WindowError(
+        raise AutoItError(
             "No window match the criteria:\n    Handle: %s" % str(handle))
     return res
 
@@ -376,7 +376,7 @@ def win_kill(title, **kwargs):
     text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinKill(LPCWSTR(title), LPCWSTR(text))
     if ret == 0:
-        raise WindowError("kill window failed")
+        raise AutoItError("kill window failed")
     return ret
 
 
@@ -388,7 +388,7 @@ def win_kill_by_handle(handle):
     """
     ret = AUTO_IT.AU3_WinKillByHandle(HWND(handle))
     if ret == 0:
-        raise WindowError("kill window failed")
+        raise AutoItError("kill window failed")
     return ret
 
 
@@ -412,7 +412,7 @@ def win_menu_select_item(title, *items, **kwargs):
                                         *f_items)
 
     if ret == 0:
-        raise WindowError("the menu item could not be found")
+        raise AutoItError("the menu item could not be found")
     return ret
 
 
@@ -431,7 +431,7 @@ def win_menu_select_item_by_handle(handle, *items):
 
     ret = AUTO_IT.AU3_WinMenuSelectItemByHandle(HWND(handle), *f_items)
     if ret == 0:
-        raise WindowError("the menu item could not be found")
+        raise AutoItError("the menu item could not be found")
     return ret
 
 
@@ -466,7 +466,7 @@ def win_move(title, x, y, width=-1, height=-1, **kwargs):
     ret = AUTO_IT.AU3_WinMove(LPCWSTR(title), LPCWSTR(text), INT(x), INT(y),
                               INT(width), INT(height))
     if ret == 0:
-        raise WindowError("No window match the criteria")
+        raise AutoItError("No window match the criteria")
     return ret
 
 
@@ -483,7 +483,7 @@ def win_move_by_handle(handle, x, y, width=-1, height=-1):
     ret = AUTO_IT.AU3_WinMoveByHandle(HWND(handle), INT(x), INT(y), INT(width),
                                       INT(height))
     if ret == 0:
-        raise WindowError("No window match the handle: %d" % handle)
+        raise AutoItError("No window match the handle: %d" % handle)
     return ret
 
 
@@ -499,7 +499,7 @@ def win_set_on_top(title, flag=1, **kwargs):
 
     ret = AUTO_IT.AU3_WinSetOnTop(LPCWSTR(title), LPCWSTR(text), INT(flag))
     if ret == 0:
-        raise WindowError("No window match the criteria")
+        raise AutoItError("No window match the criteria")
     return ret
 
 
@@ -512,7 +512,7 @@ def win_set_on_top_by_handle(handle, flag=1):
     """
     ret = AUTO_IT.AU3_WinSetOnTopByHandle(HWND(handle), INT(flag))
     if ret == 0:
-        raise WindowError("No window match the handle: %d" % handle)
+        raise AutoItError("No window match the handle: %d" % handle)
     return ret
 
 
@@ -533,7 +533,7 @@ def win_set_state(title, flag=properties.SW_SHOW, **kwargs):
 
     ret = AUTO_IT.AU3_WinSetState(LPCWSTR(title), LPCWSTR(text), INT(flag))
     if ret == 0:
-        raise WindowError("No window match the criteria")
+        raise AutoItError("No window match the criteria")
     return ret
 
 
@@ -546,7 +546,7 @@ def win_set_state_by_handle(handle, flag=properties.SW_SHOW):
     """
     ret = AUTO_IT.AU3_WinSetStateByHandle(HWND(handle), INT(flag))
     if ret == 0:
-        raise WindowError("No window match the handle: %d" % handle)
+        raise AutoItError("No window match the handle: %d" % handle)
     return ret
 
 
@@ -562,7 +562,7 @@ def win_set_title(title, new_title, **kwargs):
     ret = AUTO_IT.AU3_WinSetTitle(LPCWSTR(title), LPCWSTR(text),
                                   LPCWSTR(new_title))
     if ret == 0:
-        raise WindowError("set new title failed, "
+        raise AutoItError("set new title failed, "
                           "the matched window not be found")
     return ret
 
@@ -576,7 +576,7 @@ def win_set_title_by_handle(handle, new_title):
     """
     ret = AUTO_IT.AU3_WinSetTitleByHandle(HWND(handle), LPCWSTR(new_title))
     if ret == 0:
-        raise WindowError("set new title failed, no window match the"
+        raise AutoItError("set new title failed, no window match the"
                           " handle: %d" % handle)
     return ret
 
@@ -594,7 +594,7 @@ def win_set_trans(title, trans, **kwargs):
 
     ret = AUTO_IT.AU3_WinSetTrans(LPCWSTR(title), LPCWSTR(text), INT(trans))
     if ret == 0:
-        raise WindowError("No window match the criteria")
+        raise AutoItError("No window match the criteria")
     return ret
 
 
@@ -607,7 +607,7 @@ def win_set_trans_by_handle(handle, trans):
     """
     ret = AUTO_IT.AU3_WinSetTransByHandle(HWND(handle), INT(trans))
     if ret == 0:
-        raise WindowError("No window match the handle: %d" % handle)
+        raise AutoItError("No window match the handle: %d" % handle)
     return ret
 
 
@@ -623,7 +623,7 @@ def win_wait(title, timeout=0, **kwargs):
 
     ret = AUTO_IT.AU3_WinWait(LPCWSTR(title), LPCWSTR(text), INT(timeout))
     if ret == 0:
-        raise TimeoutError("timeout on wait for window exists")
+        raise AutoItError("timeout on wait for window exists")
     return ret
 
 
@@ -636,7 +636,7 @@ def win_wait_by_handle(handle, timeout):
     """
     ret = AUTO_IT.AU3_WinWaitByHandle(HWND(handle), INT(timeout))
     if ret == 0:
-        raise TimeoutError("timeout on wait for window exists")
+        raise AutoItError("timeout on wait for window exists")
     return ret
 
 
@@ -653,7 +653,7 @@ def win_wait_active(title, timeout=0, **kwargs):
     ret = AUTO_IT.AU3_WinWaitActive(LPCWSTR(title), LPCWSTR(text),
                                     INT(timeout))
     if ret == 0:
-        raise TimeoutError("timeout on wait for activate window")
+        raise AutoItError("timeout on wait for activate window")
     return ret
 
 
@@ -666,7 +666,7 @@ def win_wait_active_by_handle(handle, timeout):
     """
     ret = AUTO_IT.AU3_WinWaitActiveByHandle(HWND(handle), INT(timeout))
     if ret == 0:
-        raise TimeoutError("timeout on wait for activate window")
+        raise AutoItError("timeout on wait for activate window")
     return ret
 
 
@@ -681,7 +681,7 @@ def win_wait_close(title, timeout=0, **kwargs):
     text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinWaitClose(LPCWSTR(title), LPCWSTR(text), INT(timeout))
     if ret == 0:
-        raise TimeoutError("timeout on wait for close window")
+        raise AutoItError("timeout on wait for close window")
     return ret
 
 
@@ -694,7 +694,7 @@ def win_wait_close_by_handle(handle, timeout):
     """
     ret = AUTO_IT.AU3_WinWaitActiveByHandle(HWND(handle), INT(timeout))
     if ret == 0:
-        raise TimeoutError("timeout on wait for close window")
+        raise AutoItError("timeout on wait for close window")
     return ret
 
 
@@ -711,7 +711,7 @@ def win_wait_not_active(title, timeout=0, **kwargs):
     ret = AUTO_IT.AU3_WinWaitNotActive(LPCWSTR(title), LPCWSTR(text),
                                        INT(timeout))
     if ret == 0:
-        raise TimeoutError("timeout on wait for deactivate window")
+        raise AutoItError("timeout on wait for deactivate window")
     return ret
 
 
@@ -724,5 +724,5 @@ def win_wait_not_active_by_handle(handle, timeout):
     """
     ret = AUTO_IT.AU3_WinWaitNotActiveByHandle(HWND(handle), INT(timeout))
     if ret == 0:
-        raise TimeoutError("timeout on wait for deactivate window")
+        raise AutoItError("timeout on wait for deactivate window")
     return ret

@@ -4,7 +4,7 @@ __author__ = 'Jace Xu'
 __version__ = "0.2.2"
 
 from .autoit import options, properties, commands
-from .autoit import AutoItError, WindowError, ControlError, ProcessError
+from .autoit import AutoItError
 
 from .autoit import error
 from .autoit import auto_it_set_option

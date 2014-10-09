@@ -5,7 +5,7 @@ __author__ = 'Jace Xu'
 from autoit import AUTO_IT
 from autoit import error
 from autoit import Properties
-from autoit import TimeoutError, ProcessError
+from autoit import AutoItError
 from ctypes.wintypes import *
 
 
@@ -20,7 +20,7 @@ def run(filename, work_dir="", show_flag=Properties.SW_SHOWNORMAL):
     ret = AUTO_IT.AU3_Run(LPCWSTR(filename), LPCWSTR(work_dir),
                           INT(show_flag))
     if error() == 1:
-        raise ProcessError("start %s failed" % filename)
+        raise AutoItError("start %s failed" % filename)
     return ret
 
 
@@ -35,7 +35,7 @@ def run_wait(filename, work_dir="", show_flag=Properties.SW_SHOWNORMAL):
     ret = AUTO_IT.AU3_RunWait(LPCWSTR(filename), LPCWSTR(work_dir),
                               INT(show_flag))
     if error() == 1:
-        raise ProcessError("start %s failed" % filename)
+        raise AutoItError("start %s failed" % filename)
     return ret
 
 
@@ -73,9 +73,9 @@ def process_set_priority(process, priority):
     ret = AUTO_IT.AU3_ProcessSetPriority(LPCWSTR(process), INT(priority))
     if ret == 0:
         if error() == 1:
-            raise ProcessError("set priority failed")
+            raise AutoItError("set priority failed")
         elif error() == 2:
-            raise ProcessError("unsupported priority class be used")
+            raise AutoItError("unsupported priority class be used")
     return ret
 
 
@@ -88,7 +88,7 @@ def process_wait(process, timeout=0):
     """
     ret = AUTO_IT.AU3_ProcessWait(LPCWSTR(process), INT(timeout))
     if ret == 0:
-        raise TimeoutError("the process wait timed out")
+        raise AutoItError("the process wait timed out")
     return ret
 
 
@@ -101,7 +101,7 @@ def process_wait_close(process, timeout=0):
     """
     ret = AUTO_IT.AU3_ProcessWaitClose(LPCWSTR(process), INT(timeout))
     if ret == 0:
-        raise TimeoutError("the process wait close timed out")
+        raise AutoItError("the process wait close timed out")
     return ret
 
 
@@ -127,7 +127,7 @@ def run_as(user, domain, password, filename, logon_flag=1, work_dir="",
         LPCWSTR(filename), LPCWSTR(work_dir), INT(show_flag)
     )
     if error() == 1:
-        raise ProcessError("run an external program failed")
+        raise AutoItError("run an external program failed")
     return ret
 
 
@@ -153,7 +153,7 @@ def run_as_wait(user, domain, password, filename, logon_flag=1, work_dir="",
         LPCWSTR(filename), LPCWSTR(work_dir), INT(show_flag)
     )
     if error() == 1:
-        raise ProcessError("run an external program failed")
+        raise AutoItError("run an external program failed")
     return ret
 
 
@@ -170,5 +170,5 @@ def shutdown(code):
     """
     ret = AUTO_IT.AU3_Shutdown(INT(code))
     if ret == 0:
-        raise ProcessError("set shutdown failed")
+        raise AutoItError("set shutdown failed")
     return ret

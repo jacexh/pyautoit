@@ -2,7 +2,7 @@
 
 __author__ = 'Jace Xu'
 
-from autoit import INTDEFAULT, AUTO_IT, ControlError, WindowError
+from autoit import INTDEFAULT, AUTO_IT, AutoItError
 from autoit import commands, error
 from ctypes.wintypes import *
 import ctypes
@@ -30,7 +30,7 @@ def control_click(title, control, **kwargs):
                                    LPCWSTR(control), LPCWSTR(button),
                                    INT(clicks), INT(x), INT(y))
     if ret == 0:
-        raise ControlError("send click message failed")
+        raise AutoItError("send click message failed")
     return ret
 
 
@@ -51,7 +51,7 @@ def control_click_by_handle(hwnd, h_ctrl, **kwargs):
                                            INT(x), INT(y))
 
     if ret == 0:
-        raise ControlError("send click message failed")
+        raise AutoItError("send click message failed")
     return ret
 
 
@@ -73,8 +73,8 @@ def control_command(title, control, command, buf_size=256, **kwargs):
                                result, INT(buf_size))
 
     if error() == 1:
-        raise ControlError("an error occurred, may no window "
-                           "match the criteria")
+        raise AutoItError("an error occurred, may no window "
+                          "match the criteria")
     return result.value.rstrip()
 
 
@@ -95,8 +95,8 @@ def control_command_by_handle(hwnd, h_ctrl, command, buf_size=256, **kwargs):
         INT(buf_size))
 
     if error() == 1:
-        raise ControlError("an error occurred when send command: %s"
-                           % commands)
+        raise AutoItError("an error occurred when send command: %s"
+                          % commands)
     return result.value.rstrip()
 
 
@@ -122,7 +122,7 @@ def control_list_view(title, control, command, **kwargs):
     )
 
     if error() == 1:
-        raise ControlError("Window/Control could not be found")
+        raise AutoItError("Window/Control could not be found")
     return result.value.rstrip()
 
 
@@ -146,7 +146,7 @@ def control_list_view_by_handle(hwnd, h_ctrl, command, **kwargs):
     )
 
     if error() == 1:
-        raise ControlError("Window/Control could not be found")
+        raise AutoItError("Window/Control could not be found")
     return result.value.rstrip()
 
 
@@ -163,8 +163,8 @@ def control_disable(title, control, **kwargs):
     ret = AUTO_IT.AU3_ControlDisable(LPCWSTR(title), LPCWSTR(text),
                                      LPCWSTR(control))
     if ret == 0:
-        raise ControlError("disable control failed, "
-                           "window/control could not be found")
+        raise AutoItError("disable control failed, "
+                          "window/control could not be found")
     return ret
 
 
@@ -177,8 +177,8 @@ def control_disable_by_handle(hwnd, h_ctrl):
     """
     ret = AUTO_IT.AU3_ControlDisableByHandle(HWND(hwnd), HWND(h_ctrl))
     if ret == 0:
-        raise ControlError("disable control failed, "
-                           "window/control could not be found")
+        raise AutoItError("disable control failed, "
+                          "window/control could not be found")
     return ret
 
 
@@ -195,8 +195,8 @@ def control_enable(title, control, **kwargs):
     ret = AUTO_IT.AU3_ControlEnable(LPCWSTR(title), LPCWSTR(text),
                                     LPCWSTR(control))
     if ret == 0:
-        raise ControlError("enable control failed, "
-                           "window/control could not be found")
+        raise AutoItError("enable control failed, "
+                          "window/control could not be found")
     return ret
 
 
@@ -209,8 +209,8 @@ def control_enable_by_handle(hwnd, h_ctrl):
     """
     ret = AUTO_IT.AU3_ControlEnableByHandle(HWND(hwnd), HWND(h_ctrl))
     if ret == 0:
-        raise ControlError("enable control failed, "
-                           "window/control could not be found")
+        raise AutoItError("enable control failed, "
+                          "window/control could not be found")
     return ret
 
 
@@ -227,7 +227,7 @@ def control_focus(title, control, **kwargs):
     ret = AUTO_IT.AU3_ControlFocus(
         LPCWSTR(title), LPCWSTR(text), LPCWSTR(control))
     if ret == 0:
-        raise ControlError("set input focus to the given control failed")
+        raise AutoItError("set input focus to the given control failed")
     return ret
 
 
@@ -240,7 +240,7 @@ def control_focus_by_handle(hwnd, h_ctrl):
     """
     ret = AUTO_IT.AU3_ControlFocusByHandle(HWND(hwnd), HWND(h_ctrl))
     if ret == 0:
-        raise ControlError("set input focus to the given control failed")
+        raise AutoItError("set input focus to the given control failed")
     return ret
 
 
@@ -259,7 +259,7 @@ def control_get_focus(title, **kwargs):
         LPCWSTR(title), LPCWSTR(text), ctrl_with_focus, INT(buf_size))
 
     if error() == 1:
-        raise WindowError("the specified window could not be found")
+        raise AutoItError("the specified window could not be found")
     return ctrl_with_focus.value.rstrip()
 
 
@@ -276,7 +276,7 @@ def control_get_focus_by_handle(hwnd, buf_size=256):
                                         INT(buf_size))
 
     if error() == 1:
-        raise WindowError("the specified window could not be found")
+        raise AutoItError("the specified window could not be found")
     return ctrl_with_focus.value.rstrip()
 
 
@@ -290,7 +290,7 @@ def control_get_handle(hwnd, control):
     ret = AUTO_IT.AU3_ControlGetHandle(HWND(hwnd), LPCWSTR(control))
 
     if error() == 1:
-        raise ControlError("No window/control match the criteria")
+        raise AutoItError("No window/control match the criteria")
     return ret
 
 
@@ -312,7 +312,7 @@ def control_get_handle_as_text(title, control, **kwargs):
     )
 
     if error() == 1:
-        raise ControlError("No window/control match the criteria")
+        raise AutoItError("No window/control match the criteria")
     return ret_text.value.rstrip()
 
 
@@ -332,7 +332,7 @@ def control_get_pos(title, control, text=""):
     )
 
     if error() == 1:
-        raise ControlError("No window/control match the criteria")
+        raise AutoItError("No window/control match the criteria")
     return rect.left, rect.top, rect.right, rect.bottom
 
 
@@ -349,7 +349,7 @@ def control_get_pos_by_handle(hwnd, h_ctrl):
                                       ctypes.byref(rect))
 
     if error() == 1:
-        raise ControlError("No window/control match the criteria")
+        raise AutoItError("No window/control match the criteria")
     return rect.left, rect.top, rect.right, rect.bottom
 
 
@@ -371,7 +371,7 @@ def control_get_text(title, control, **kwargs):
     )
 
     if error() == 1:
-        raise ControlError("No window/control match the criteria")
+        raise AutoItError("No window/control match the criteria")
     return ctrl_text.value.rstrip()
 
 
@@ -390,7 +390,7 @@ def control_get_text_by_handle(hwnd, h_ctrl, **kwargs):
     )
 
     if error() == 1:
-        raise ControlError("No window/control match the criteria")
+        raise AutoItError("No window/control match the criteria")
     return ctrl_text.value.rstrip()
 
 
@@ -407,8 +407,8 @@ def control_hide(title, control, **kwargs):
     ret = AUTO_IT.AU3_ControlHide(
         LPCWSTR(title), LPCWSTR(text), LPCWSTR(control))
     if ret == 0:
-        raise ControlError("hide control failed, "
-                           "window/control could not be found")
+        raise AutoItError("hide control failed, "
+                          "window/control could not be found")
     return ret
 
 
@@ -421,8 +421,8 @@ def control_hide_by_handle(hwnd, h_ctrl):
     """
     ret = AUTO_IT.AU3_ControlHideByHandle(HWND(hwnd), HWND(h_ctrl))
     if ret == 0:
-        raise ControlError("hide control failed, "
-                           "window/control could not be found")
+        raise AutoItError("hide control failed, "
+                          "window/control could not be found")
     return ret
 
 
@@ -444,7 +444,7 @@ def control_move(title, control, x, y, width=-1, height=-1, **kwargs):
     )
 
     if ret == 0:
-        raise ControlError("No window/control match the criteria")
+        raise AutoItError("No window/control match the criteria")
     return ret
 
 
@@ -463,7 +463,7 @@ def control_move_by_handle(hwnd, h_ctrl, x, y, width=-1, height=-1):
         HWND(hwnd), HWND(h_ctrl), INT(x), INT(y), INT(width), INT(height)
     )
     if ret == 0:
-        raise ControlError("No window/control match the criteria")
+        raise AutoItError("No window/control match the criteria")
     return ret
 
 
@@ -488,7 +488,7 @@ def control_send(title, control, send_text, mode=0, **kwargs):
     )
 
     if ret == 0:
-        raise ControlError("no window/control match the criteria")
+        raise AutoItError("no window/control match the criteria")
     return ret
 
 
@@ -507,7 +507,7 @@ def control_send_by_handle(hwnd, h_ctrl, send_text, mode=0):
     )
 
     if ret == 0:
-        raise ControlError("no window/control match the criteria")
+        raise AutoItError("no window/control match the criteria")
     return ret
 
 
@@ -527,7 +527,7 @@ def control_set_text(title, control, control_text, **kwargs):
     )
 
     if ret == 0:
-        raise ControlError("no window/control match the criteria")
+        raise AutoItError("no window/control match the criteria")
     return ret
 
 
@@ -543,7 +543,7 @@ def control_set_text_by_handle(hwnd, h_ctrl, control_text):
         HWND(hwnd), HWND(h_ctrl), LPCWSTR(control_text)
     )
     if ret == 0:
-        raise ControlError("no window/control match the criteria")
+        raise AutoItError("no window/control match the criteria")
     return ret
 
 
@@ -560,8 +560,8 @@ def control_show(title, control, **kwargs):
     ret = AUTO_IT.AU3_ControlShow(
         LPCWSTR(title), LPCWSTR(text), LPCWSTR(control))
     if ret == 0:
-        raise ControlError("show control failed, "
-                           "window/control could not be found")
+        raise AutoItError("show control failed, "
+                          "window/control could not be found")
     return ret
 
 
@@ -574,8 +574,8 @@ def control_show_by_handle(hwnd, h_ctrl):
     """
     ret = AUTO_IT.AU3_ControlShowByHandle(HWND(hwnd), HWND(h_ctrl))
     if ret == 0:
-        raise ControlError("show control failed, "
-                           "window/control could not be found")
+        raise AutoItError("show control failed, "
+                          "window/control could not be found")
     return ret
 
 
@@ -601,7 +601,7 @@ def control_tree_view(title, control, command, **kwargs):
     )
 
     if error() == 1:
-        raise ControlError("Window/Control could not be found")
+        raise AutoItError("Window/Control could not be found")
     return result.value.rstrip()
 
 
@@ -624,7 +624,7 @@ def control_tree_view_by_handle(hwnd, h_ctrl, command, **kwargs):
         LPCWSTR(extra1), LPCWSTR(extra2), result, INT(buf_size)
     )
     if error() == 1:
-        raise ControlError("Window/Control could not be found")
+        raise AutoItError("Window/Control could not be found")
     return result.value.rstrip()
 
 
@@ -646,7 +646,7 @@ def statusbar_get_text(title, text="", part=1, buf_size=256):
     )
 
     if error() == 1:
-        raise ControlError("no text could be read")
+        raise AutoItError("no text could be read")
     return sb_text.value.rstrip()
 
 
@@ -665,5 +665,5 @@ def statusbar_get_text_by_handle(hwnd, part=1, buf_size=256):
     )
 
     if error() == 1:
-        raise ControlError("no text could be read")
+        raise AutoItError("no text could be read")
     return statusbar_text.value.rstrip()
