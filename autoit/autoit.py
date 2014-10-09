@@ -31,6 +31,20 @@ def error():
     return AUTO_IT.AU3_error()
 
 
+def api(check_error=False, err_msg=""):
+    def _is_got_error():
+        return True if error() == 1 else False
+
+    def _api(func):
+        def wrapper(*args, **kwargs):
+            ret = func(*args, **kwargs)
+            if check_error and _is_got_error():
+                raise AutoItError(err_msg)
+            return ret
+        return wrapper
+    return _api
+
+
 def auto_it_set_option(option, param):
     """
     Changes the operation of various AutoIt functions/parameters
