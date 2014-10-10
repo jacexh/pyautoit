@@ -6,6 +6,7 @@ import ctypes
 import os
 import platform
 from ctypes.wintypes import *
+from functools import wraps
 
 dll = "AutoItX3.dll"
 bit, _ = platform.architecture()
@@ -31,18 +32,54 @@ def error():
     return AUTO_IT.AU3_error()
 
 
-def api(check_error=False, err_msg=""):
-    def _is_got_error():
+class AutoItAPI(object):
+
+    def __init__(self):
+        self.msg = {}
+
+    @staticmethod
+    def _has_error():
         return True if error() == 1 else False
 
-    def _api(func):
-        def wrapper(*args, **kwargs):
-            ret = func(*args, **kwargs)
-            if check_error and _is_got_error():
-                raise AutoItError(err_msg)
-            return ret
-        return wrapper
-    return _api
+    @staticmethod
+    def _has_unexpected_ret(ret, unexpected):
+        if ret in unexpected:
+            return True
+        return False
+
+    def check(self, mark=0, unexpected_ret=(0,), err_msg=""):
+        """
+        :param mark:
+            0 - do not need check return value or error()
+            1 - check error()
+            2 - check return value
+        """
+
+        def _check(fn):
+            @wraps(fn)
+            def wrapper(*args, **kwargs):
+                ret = fn(*args, **kwargs)
+                # if skip:
+                #     return ret
+
+                if mark == 1:
+                    if self._has_error():
+                        raise AutoItError(err_msg)
+
+                elif mark == 2:
+                    if self._has_unexpected_ret(ret, unexpected_ret):
+                        raise AutoItError(err_msg)
+
+                elif mark == 3:
+                    if any([self._has_error(),
+                            self._has_unexpected_ret(ret, unexpected_ret)]):
+                        raise AutoItError(err_msg)
+                return ret
+            return wrapper
+        return _check
+
+
+api = AutoItAPI()
 
 
 def auto_it_set_option(option, param):
