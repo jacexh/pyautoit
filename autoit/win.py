@@ -3,13 +3,14 @@
 __author__ = 'Jace Xu'
 
 from autoit import AUTO_IT
-from autoit import error
+from autoit import api
 from autoit import AutoItError
 from ctypes.wintypes import *
 from ctypes import create_unicode_buffer, byref
 from autoit import properties
 
 
+@api.check(2, "activate window failed, maybe the window doesn't exist")
 def win_activate(title, **kwargs):
     """
     Activates (gives focus to) a window.
@@ -19,12 +20,10 @@ def win_activate(title, **kwargs):
     """
     text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinActivate(LPCWSTR(title), LPCWSTR(text))
-    if ret == 0:
-        raise AutoItError(
-            "activate window failed, maybe the window does not exist")
     return ret
 
 
+@api.check(2, "activate window failed, maybe the window doesn't exist")
 def win_activate_by_handle(handle):
     """
 
@@ -32,10 +31,6 @@ def win_activate_by_handle(handle):
     :return:
     """
     ret = AUTO_IT.AU3_WinActivateByHandle(HWND(handle))
-    if ret == 0:
-        raise AutoItError(
-            "activate window by handle failed, maybe the window "
-            "does not exist")
     return ret
 
 
@@ -61,6 +56,7 @@ def win_active_by_handle(handle):
     return ret
 
 
+@api.check(2, "close this window failed, maybe the window doesn't exist")
 def win_close(title, **kwargs):
     """
 
@@ -70,12 +66,10 @@ def win_close(title, **kwargs):
     """
     text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinClose(LPCWSTR(title), LPCWSTR(text))
-    if ret == 0:
-        raise AutoItError(
-            "close this window failed, maybe the window does not exist")
     return ret
 
 
+@api.check(2, "close window failed, maybe the window does not exist")
 def win_close_by_handle(handle):
     """
 
@@ -83,10 +77,6 @@ def win_close_by_handle(handle):
     :return:
     """
     ret = AUTO_IT.AU3_WinCloseByHandle(HWND(handle))
-    if ret == 0:
-        raise AutoItError(
-            "close window failed, maybe the window does not exist"
-        )
     return ret
 
 
@@ -112,6 +102,7 @@ def win_exists_by_handle(handle):
     return ret
 
 
+@api.check(1, "get the coordinates of the caret failed")
 def win_get_caret_pos():
     """
     Returns the coordinates of the caret in the foreground window
@@ -119,8 +110,6 @@ def win_get_caret_pos():
     """
     p = POINT()
     AUTO_IT.AU3_WinGetCaretPos(byref(p))
-    if error() == 1:
-        raise AutoItError("get the coordinates of the caret failed")
     return p.x, p.y
 
 
@@ -187,6 +176,7 @@ def win_get_client_size_by_handle(handle):
     return rect.right, rect.bottom
 
 
+@api.check(3, "No window match the criteria")
 def win_get_handle(title, **kwargs):
     """
 
@@ -196,11 +186,10 @@ def win_get_handle(title, **kwargs):
     """
     text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinGetHandle(LPCWSTR(title), LPCWSTR(text))
-    if ret == 0 and error() == 1:
-        raise AutoItError("No window match the criteria")
     return ret
 
 
+@api.check(1, "No window match the criteria")
 def win_get_handle_as_text(title, buf_size=16, **kwargs):
     """
 
@@ -213,8 +202,6 @@ def win_get_handle_as_text(title, buf_size=16, **kwargs):
     rec_text = create_unicode_buffer(buf_size)
     AUTO_IT.AU3_WinGetHandleAsText(LPCWSTR(title), LPCWSTR(text),
                                    rec_text, INT(buf_size))
-    if error() == 1:
-        raise AutoItError("No window match the criteria")
     msg = rec_text.value
     return msg
 
@@ -247,6 +234,7 @@ def win_get_pos_by_handle(handle):
     return rect.left, rect.top, rect.right, rect.bottom
 
 
+@api.check(2, "No window match the criteria", unexpected_ret=(-1,))
 def win_get_process(title, **kwargs):
     """
 
@@ -256,13 +244,10 @@ def win_get_process(title, **kwargs):
     """
     text = kwargs.get("text", "")
     res = AUTO_IT.AU3_WinGetProcess(LPCWSTR(title), LPCWSTR(text))
-    if res == -1:
-        raise AutoItError(
-            "No window match the criteria: \n    Title: %s\n    Text: %s" %
-            (str(title), str(text)))
     return res
 
 
+@api.check(2, "No window match the criteria", unexpected_ret=(-1,))
 def win_get_process_by_handle(handle):
     """
 
@@ -270,12 +255,10 @@ def win_get_process_by_handle(handle):
     :return:
     """
     res = AUTO_IT.AU3_WinGetProcessByHandle(HWND(handle))
-    if res == -1:
-        raise AutoItError(
-            "No window match the criteria:\n    Handle: %s" % str(handle))
     return res
 
 
+@api.check(2, "No window match the criteria")
 def win_get_state(title, **kwargs):
     """
     Retrieves the state of a given window.
@@ -291,13 +274,10 @@ def win_get_state(title, **kwargs):
     """
     text = kwargs.get("text", "")
     res = AUTO_IT.AU3_WinGetState(LPCWSTR(title), LPCWSTR(text))
-    if res == 0:
-        raise AutoItError(
-            "No window match the criteria: \n    Title: %s\n    Text: %s" %
-            (str(title), str(text)))
     return res
 
 
+@api.check(2, "No window match the criteria")
 def win_get_state_by_handle(handle):
     """
 
@@ -305,9 +285,6 @@ def win_get_state_by_handle(handle):
     :return:
     """
     res = AUTO_IT.AU3_WinGetStateByHandle(HWND(handle))
-    if res == 0:
-        raise AutoItError(
-            "No window match the criteria:\n    Handle: %s" % str(handle))
     return res
 
 
@@ -366,6 +343,7 @@ def win_get_title_by_handle(handle, buf_size=256):
     return val
 
 
+@api.check(2, "No window match the criteria")
 def win_kill(title, **kwargs):
     """
 
@@ -375,11 +353,10 @@ def win_kill(title, **kwargs):
     """
     text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinKill(LPCWSTR(title), LPCWSTR(text))
-    if ret == 0:
-        raise AutoItError("kill window failed")
     return ret
 
 
+@api.check(2, "No window match the criteria")
 def win_kill_by_handle(handle):
     """
 
@@ -387,11 +364,10 @@ def win_kill_by_handle(handle):
     :return:
     """
     ret = AUTO_IT.AU3_WinKillByHandle(HWND(handle))
-    if ret == 0:
-        raise AutoItError("kill window failed")
     return ret
 
 
+@api.check(2, "the menu item could not be found")
 def win_menu_select_item(title, *items, **kwargs):
     """
     Usage:
@@ -410,12 +386,10 @@ def win_menu_select_item(title, *items, **kwargs):
 
     ret = AUTO_IT.AU3_WinMenuSelectItem(LPCWSTR(title), LPCWSTR(text),
                                         *f_items)
-
-    if ret == 0:
-        raise AutoItError("the menu item could not be found")
     return ret
 
 
+@api.check(2, "the menu item could not be found")
 def win_menu_select_item_by_handle(handle, *items):
     """
 
@@ -430,8 +404,6 @@ def win_menu_select_item_by_handle(handle, *items):
         f_items.append(LPCWSTR(""))
 
     ret = AUTO_IT.AU3_WinMenuSelectItemByHandle(HWND(handle), *f_items)
-    if ret == 0:
-        raise AutoItError("the menu item could not be found")
     return ret
 
 
@@ -451,6 +423,7 @@ def win_minimize_all_undo():
     AUTO_IT.AU3_WinMinimizeAllUndo()
 
 
+@api.check(2, "No window match the criteria")
 def win_move(title, x, y, width=-1, height=-1, **kwargs):
     """
 
@@ -465,11 +438,10 @@ def win_move(title, x, y, width=-1, height=-1, **kwargs):
     text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinMove(LPCWSTR(title), LPCWSTR(text), INT(x), INT(y),
                               INT(width), INT(height))
-    if ret == 0:
-        raise AutoItError("No window match the criteria")
     return ret
 
 
+@api.check(2, "No window match the criteria")
 def win_move_by_handle(handle, x, y, width=-1, height=-1):
     """
 
@@ -482,11 +454,10 @@ def win_move_by_handle(handle, x, y, width=-1, height=-1):
     """
     ret = AUTO_IT.AU3_WinMoveByHandle(HWND(handle), INT(x), INT(y), INT(width),
                                       INT(height))
-    if ret == 0:
-        raise AutoItError("No window match the handle: %d" % handle)
     return ret
 
 
+@api.check(2, "No window match the criteria")
 def win_set_on_top(title, flag=1, **kwargs):
     """
 
@@ -498,11 +469,10 @@ def win_set_on_top(title, flag=1, **kwargs):
     text = kwargs.get("text", "")
 
     ret = AUTO_IT.AU3_WinSetOnTop(LPCWSTR(title), LPCWSTR(text), INT(flag))
-    if ret == 0:
-        raise AutoItError("No window match the criteria")
     return ret
 
 
+@api.check(2, "No window match the criteria")
 def win_set_on_top_by_handle(handle, flag=1):
     """
 
@@ -511,11 +481,10 @@ def win_set_on_top_by_handle(handle, flag=1):
     :return:
     """
     ret = AUTO_IT.AU3_WinSetOnTopByHandle(HWND(handle), INT(flag))
-    if ret == 0:
-        raise AutoItError("No window match the handle: %d" % handle)
     return ret
 
 
+@api.check(2, "No window match the criteria")
 def win_set_state(title, flag=properties.SW_SHOW, **kwargs):
     """
 
@@ -532,11 +501,10 @@ def win_set_state(title, flag=properties.SW_SHOW, **kwargs):
     text = kwargs.get("text", "")
 
     ret = AUTO_IT.AU3_WinSetState(LPCWSTR(title), LPCWSTR(text), INT(flag))
-    if ret == 0:
-        raise AutoItError("No window match the criteria")
     return ret
 
 
+@api.check(2, "No window match the criteria")
 def win_set_state_by_handle(handle, flag=properties.SW_SHOW):
     """
 
@@ -545,11 +513,10 @@ def win_set_state_by_handle(handle, flag=properties.SW_SHOW):
     :return:
     """
     ret = AUTO_IT.AU3_WinSetStateByHandle(HWND(handle), INT(flag))
-    if ret == 0:
-        raise AutoItError("No window match the handle: %d" % handle)
     return ret
 
 
+@api.check(2, "No window match the criteria")
 def win_set_title(title, new_title, **kwargs):
     """
 
@@ -561,12 +528,10 @@ def win_set_title(title, new_title, **kwargs):
     text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinSetTitle(LPCWSTR(title), LPCWSTR(text),
                                   LPCWSTR(new_title))
-    if ret == 0:
-        raise AutoItError("set new title failed, "
-                          "the matched window not be found")
     return ret
 
 
+@api.check(2, "No window match the criteria")
 def win_set_title_by_handle(handle, new_title):
     """
 
@@ -575,12 +540,10 @@ def win_set_title_by_handle(handle, new_title):
     :return:
     """
     ret = AUTO_IT.AU3_WinSetTitleByHandle(HWND(handle), LPCWSTR(new_title))
-    if ret == 0:
-        raise AutoItError("set new title failed, no window match the"
-                          " handle: %d" % handle)
     return ret
 
 
+@api.check(2, "No window match the criteria")
 def win_set_trans(title, trans, **kwargs):
     """
     Sets the transparency of a window.
@@ -593,11 +556,10 @@ def win_set_trans(title, trans, **kwargs):
     text = kwargs.get("text", "")
 
     ret = AUTO_IT.AU3_WinSetTrans(LPCWSTR(title), LPCWSTR(text), INT(trans))
-    if ret == 0:
-        raise AutoItError("No window match the criteria")
     return ret
 
 
+@api.check(2, "No window match the criteria")
 def win_set_trans_by_handle(handle, trans):
     """
 
@@ -606,11 +568,10 @@ def win_set_trans_by_handle(handle, trans):
     :return:
     """
     ret = AUTO_IT.AU3_WinSetTransByHandle(HWND(handle), INT(trans))
-    if ret == 0:
-        raise AutoItError("No window match the handle: %d" % handle)
     return ret
 
 
+@api.check(2, "timeout on wait for window exists")
 def win_wait(title, timeout=0, **kwargs):
     """
 
@@ -622,11 +583,10 @@ def win_wait(title, timeout=0, **kwargs):
     text = kwargs.get("text", "")
 
     ret = AUTO_IT.AU3_WinWait(LPCWSTR(title), LPCWSTR(text), INT(timeout))
-    if ret == 0:
-        raise AutoItError("timeout on wait for window exists")
     return ret
 
 
+@api.check(2, "timeout on wait for window exists")
 def win_wait_by_handle(handle, timeout):
     """
 
@@ -635,11 +595,10 @@ def win_wait_by_handle(handle, timeout):
     :return:
     """
     ret = AUTO_IT.AU3_WinWaitByHandle(HWND(handle), INT(timeout))
-    if ret == 0:
-        raise AutoItError("timeout on wait for window exists")
     return ret
 
 
+@api.check(2, "timeout on wait for activate window")
 def win_wait_active(title, timeout=0, **kwargs):
     """
 
@@ -652,11 +611,10 @@ def win_wait_active(title, timeout=0, **kwargs):
 
     ret = AUTO_IT.AU3_WinWaitActive(LPCWSTR(title), LPCWSTR(text),
                                     INT(timeout))
-    if ret == 0:
-        raise AutoItError("timeout on wait for activate window")
     return ret
 
 
+@api.check(2, "timeout on wait for activate window")
 def win_wait_active_by_handle(handle, timeout):
     """
 
@@ -665,11 +623,10 @@ def win_wait_active_by_handle(handle, timeout):
     :return:
     """
     ret = AUTO_IT.AU3_WinWaitActiveByHandle(HWND(handle), INT(timeout))
-    if ret == 0:
-        raise AutoItError("timeout on wait for activate window")
     return ret
 
 
+@api.check(2, "timeout on wait for close window")
 def win_wait_close(title, timeout=0, **kwargs):
     """
 
@@ -680,11 +637,10 @@ def win_wait_close(title, timeout=0, **kwargs):
     """
     text = kwargs.get("text", "")
     ret = AUTO_IT.AU3_WinWaitClose(LPCWSTR(title), LPCWSTR(text), INT(timeout))
-    if ret == 0:
-        raise AutoItError("timeout on wait for close window")
     return ret
 
 
+@api.check(2, "timeout on wait for close window")
 def win_wait_close_by_handle(handle, timeout):
     """
 
@@ -693,11 +649,10 @@ def win_wait_close_by_handle(handle, timeout):
     :return:
     """
     ret = AUTO_IT.AU3_WinWaitActiveByHandle(HWND(handle), INT(timeout))
-    if ret == 0:
-        raise AutoItError("timeout on wait for close window")
     return ret
 
 
+@api.check(2, "timeout on wait for deactivate window")
 def win_wait_not_active(title, timeout=0, **kwargs):
     """
 
@@ -710,11 +665,10 @@ def win_wait_not_active(title, timeout=0, **kwargs):
 
     ret = AUTO_IT.AU3_WinWaitNotActive(LPCWSTR(title), LPCWSTR(text),
                                        INT(timeout))
-    if ret == 0:
-        raise AutoItError("timeout on wait for deactivate window")
     return ret
 
 
+@api.check(2, "timeout on wait for deactivate window")
 def win_wait_not_active_by_handle(handle, timeout):
     """
 
@@ -723,6 +677,4 @@ def win_wait_not_active_by_handle(handle, timeout):
     :return:
     """
     ret = AUTO_IT.AU3_WinWaitNotActiveByHandle(HWND(handle), INT(timeout))
-    if ret == 0:
-        raise AutoItError("timeout on wait for deactivate window")
     return ret
