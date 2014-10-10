@@ -3,12 +3,13 @@
 __author__ = 'Jace Xu'
 
 from autoit import AUTO_IT
-from autoit import error
+from autoit import api, error
 from autoit import Properties
 from autoit import AutoItError
 from ctypes.wintypes import *
 
 
+@api.check(1, "run program failed")
 def run(filename, work_dir="", show_flag=Properties.SW_SHOWNORMAL):
     """
 
@@ -19,11 +20,10 @@ def run(filename, work_dir="", show_flag=Properties.SW_SHOWNORMAL):
     """
     ret = AUTO_IT.AU3_Run(LPCWSTR(filename), LPCWSTR(work_dir),
                           INT(show_flag))
-    if error() == 1:
-        raise AutoItError("start %s failed" % filename)
     return ret
 
 
+@api.check(1, "run program failed")
 def run_wait(filename, work_dir="", show_flag=Properties.SW_SHOWNORMAL):
     """
 
@@ -34,8 +34,6 @@ def run_wait(filename, work_dir="", show_flag=Properties.SW_SHOWNORMAL):
     """
     ret = AUTO_IT.AU3_RunWait(LPCWSTR(filename), LPCWSTR(work_dir),
                               INT(show_flag))
-    if error() == 1:
-        raise AutoItError("start %s failed" % filename)
     return ret
 
 
@@ -79,6 +77,7 @@ def process_set_priority(process, priority):
     return ret
 
 
+@api.check(2, "the process wait timed out")
 def process_wait(process, timeout=0):
     """
     Pauses script execution until a given process exists.
@@ -87,11 +86,10 @@ def process_wait(process, timeout=0):
     :return:
     """
     ret = AUTO_IT.AU3_ProcessWait(LPCWSTR(process), INT(timeout))
-    if ret == 0:
-        raise AutoItError("the process wait timed out")
     return ret
 
 
+@api.check(2, "the process wait close timed out")
 def process_wait_close(process, timeout=0):
     """
     Pauses script execution until a given process does not exist.
@@ -100,11 +98,10 @@ def process_wait_close(process, timeout=0):
     :return:
     """
     ret = AUTO_IT.AU3_ProcessWaitClose(LPCWSTR(process), INT(timeout))
-    if ret == 0:
-        raise AutoItError("the process wait close timed out")
     return ret
 
 
+@api.check(1, "run an external program failed")
 def run_as(user, domain, password, filename, logon_flag=1, work_dir="",
            show_flag=Properties.SW_SHOWNORMAL):
     """
@@ -126,11 +123,10 @@ def run_as(user, domain, password, filename, logon_flag=1, work_dir="",
         LPCWSTR(user), LPCWSTR(domain), LPCWSTR(password), INT(logon_flag),
         LPCWSTR(filename), LPCWSTR(work_dir), INT(show_flag)
     )
-    if error() == 1:
-        raise AutoItError("run an external program failed")
     return ret
 
 
+@api.check(1, "run an external program failed")
 def run_as_wait(user, domain, password, filename, logon_flag=1, work_dir="",
                 show_flag=Properties.SW_SHOWNORMAL):
     """
@@ -152,11 +148,10 @@ def run_as_wait(user, domain, password, filename, logon_flag=1, work_dir="",
         LPCWSTR(user), LPCWSTR(domain), LPCWSTR(password), INT(logon_flag),
         LPCWSTR(filename), LPCWSTR(work_dir), INT(show_flag)
     )
-    if error() == 1:
-        raise AutoItError("run an external program failed")
     return ret
 
 
+@api.check(2, "set shutdown failed")
 def shutdown(code):
     """
 
@@ -169,6 +164,4 @@ def shutdown(code):
     :return:
     """
     ret = AUTO_IT.AU3_Shutdown(INT(code))
-    if ret == 0:
-        raise AutoItError("set shutdown failed")
     return ret
