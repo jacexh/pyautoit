@@ -47,6 +47,13 @@ class AutoItAPI(object):
             return True
         return False
 
+    @staticmethod
+    def _parser(x, y):
+        if x["num"] >= y:
+            x["flags"].append(y)
+            x["num"] -= y
+        return x
+
     def check(self, mark=0, unexpected_ret=(0,), err_msg=""):
         """
         :param mark:
@@ -60,18 +67,17 @@ class AutoItAPI(object):
             def wrapper(*args, **kwargs):
                 ret = fn(*args, **kwargs)
 
-                if mark == 1:
+                flags = reduce(
+                    self._parser, [dict(num=mark, flags=[]), 2, 1])["flags"]
+
+                if 1 in flags:
                     if self._has_error():
                         raise AutoItError(err_msg)
 
-                elif mark == 2:
+                if 2 in flags:
                     if self._has_unexpected_ret(ret, unexpected_ret):
                         raise AutoItError(err_msg)
 
-                elif mark == 3:
-                    if self._has_error() or \
-                            self._has_unexpected_ret(ret, unexpected_ret):
-                        raise AutoItError(err_msg)
                 return ret
             return wrapper
         return _check
@@ -80,6 +86,7 @@ class AutoItAPI(object):
 api = AutoItAPI()
 
 
+@api.check()
 def auto_it_set_option(option, param):
     """
     Changes the operation of various AutoIt functions/parameters
@@ -310,6 +317,7 @@ commands = Commands
 INTDEFAULT = -2147483647
 
 
+@api.check(1, err_msg="clipboard is empty or contains a non-text entry")
 def clip_get(buf_size=256):
     """
 
@@ -319,12 +327,10 @@ def clip_get(buf_size=256):
 
     clip = ctypes.create_unicode_buffer(buf_size)
     AUTO_IT.AU3_ClipGet(clip, INT(buf_size))
-
-    if error() == 1:
-        raise AutoItError("clipboard is empty or contains a non-text entry")
     return clip.value.rstrip()
 
 
+@api.check(2, err_msg="Write text to clipboard failed")
 def clip_put(value):
     """
 
@@ -332,9 +338,6 @@ def clip_put(value):
     :return:
     """
     ret = AUTO_IT.AU3_ClipPut(LPCWSTR(value))
-
-    if ret == 0:
-        raise AutoItError("Write text to clipboard failed")
     return ret
 
 
@@ -379,6 +382,7 @@ def drive_map_add(device, share, flag=0, user="", pwd="", buf_size=256):
     return result.value.rstrip()
 
 
+@api.check(2, err_msg="the disconnection was unsuccessful")
 def drive_map_del(device):
     """
 
@@ -386,11 +390,10 @@ def drive_map_del(device):
     :return:
     """
     ret = AUTO_IT.AU3_DriveMapDel(LPCWSTR(device))
-    if ret == 0:
-        raise AutoItError("the disconnection was unsuccessful")
     return ret
 
 
+@api.check(1, err_msg="get the details of a mapped drive failed")
 def drive_map_get(device, buf_size=256):
     """
 
@@ -400,9 +403,6 @@ def drive_map_get(device, buf_size=256):
     """
     mapping = ctypes.create_unicode_buffer(buf_size)
     AUTO_IT.AU3_DriveMapGet(LPCWSTR(device), mapping, INT(buf_size))
-
-    if error():
-        raise AutoItError("get the details of a mapped drive failed")
     return mapping.value.rstrip()
 
 
@@ -489,6 +489,7 @@ def mouse_up(button="left"):
     AUTO_IT.AU3_MouseUp(LPCWSTR(button))
 
 
+@api.check(1, err_msg="the direction is not recognized")
 def mouse_wheel(direction, clicks=-1):
     """
 
@@ -497,9 +498,6 @@ def mouse_wheel(direction, clicks=-1):
     :return:
     """
     AUTO_IT.AU3_MouseWheel(LPCWSTR(direction), INT(clicks))
-
-    if error():
-        raise AutoItError("the direction is not recognized")
 
 
 def opt(option, value):
@@ -527,6 +525,7 @@ def pixel_checksum(left, top, right, bottom, step=1):
     return ret
 
 
+@api.check(2, unexpected_ret=(-1,), err_msg="invalid coordinates")
 def pixel_get_color(x, y):
     """
 
@@ -535,11 +534,10 @@ def pixel_get_color(x, y):
     :return:
     """
     ret = AUTO_IT.AU3_PixelGetColor(INT(x), INT(y))
-    if ret == -1:
-        raise AutoItError("invalid coordinates")
     return ret
 
 
+@api.check(1, err_msg="color is not found")
 def pixel_search(left, top, right, bottom, col, var=1, step=1):
     """
 
@@ -558,9 +556,6 @@ def pixel_search(left, top, right, bottom, col, var=1, step=1):
     AUTO_IT.AU3_PixelSearch(
         ctypes.byref(rect), INT(col), INT(var), INT(step), ctypes.byref(p)
     )
-
-    if error():
-        raise AutoItError("color is not found")
     return p.x, p.y
 
 
