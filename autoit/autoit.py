@@ -59,8 +59,6 @@ class AutoItAPI(object):
             @wraps(fn)
             def wrapper(*args, **kwargs):
                 ret = fn(*args, **kwargs)
-                # if skip:
-                #     return ret
 
                 if mark == 1:
                     if self._has_error():
@@ -71,8 +69,8 @@ class AutoItAPI(object):
                         raise AutoItError(err_msg)
 
                 elif mark == 3:
-                    if any([self._has_error(),
-                            self._has_unexpected_ret(ret, unexpected_ret)]):
+                    if self._has_error() or \
+                            self._has_unexpected_ret(ret, unexpected_ret):
                         raise AutoItError(err_msg)
                 return ret
             return wrapper
