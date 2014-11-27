@@ -306,7 +306,7 @@ class Commands(object):
     select_all = "SelectAll"
     select_clear = "SelectClear"
     select_invert = "SelectInvert"
-    view_change = "View"
+    view_change = "ViewChange"
     collapse = "Collapse"
     exists = "Exists"
     expand = "Expand"
