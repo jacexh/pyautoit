@@ -2,11 +2,15 @@
 
 __author__ = 'Jace Xu'
 
-import ctypes
 import os
 import platform
 from ctypes.wintypes import *
 from functools import wraps
+import sys
+if sys.version_info[0] == 3:
+    from functools import reduce
+else:
+    import ctypes
 
 dll = "AutoItX3.dll"
 bit, _ = platform.architecture()
