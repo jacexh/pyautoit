@@ -2,8 +2,8 @@
 
 __author__ = 'Jace Xu'
 
-from autoit import INTDEFAULT, AUTO_IT
-from autoit import api
+from .autoit import INTDEFAULT, AUTO_IT
+from .autoit import api
 from ctypes.wintypes import *
 import ctypes
 

@@ -2,12 +2,12 @@
 
 __author__ = 'Jace Xu'
 
-from autoit import AUTO_IT
-from autoit import api
-from autoit import AutoItError
+from .autoit import AUTO_IT
+from .autoit import api
+from .autoit import AutoItError
 from ctypes.wintypes import *
 from ctypes import create_unicode_buffer, byref
-from autoit import properties
+from .autoit import properties
 
 
 @api.check(2, "activate window failed, maybe the window doesn't exist")

@@ -2,10 +2,10 @@
 
 __author__ = 'Jace Xu'
 
-from autoit import AUTO_IT
-from autoit import api, error
-from autoit import Properties
-from autoit import AutoItError
+from .autoit import AUTO_IT
+from .autoit import api, error
+from .autoit import Properties
+from .autoit import AutoItError
 from ctypes.wintypes import *
 
 
