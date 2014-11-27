@@ -24,7 +24,7 @@ Example
 ~~~~~~~
 
 -  open notepad
--  type some string into notepad, eg: “hello world”
+-  type some string into notepad, eg: "hello world"
 -  close notepad without saving
 
 .. code:: python
