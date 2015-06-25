@@ -15,7 +15,7 @@ else:
 dll = "AutoItX3.dll"
 bit, _ = platform.architecture()
 
-if "(x86)" in os.environ['PROGRAMFILES'] and bit == "64bit":
+if bit == "64bit":
     # if 64bit version of python within 64bit version of Windows,
     # load AutoItX3_x64.dll
     dll = "AutoItX3_x64.dll"
