@@ -648,7 +648,7 @@ def win_wait_close_by_handle(handle, timeout):
     :param timeout:
     :return:
     """
-    ret = AUTO_IT.AU3_WinWaitActiveByHandle(HWND(handle), INT(timeout))
+    ret = AUTO_IT.AU3_WinWaitCloseByHandle(HWND(handle), INT(timeout))
     return ret
 
 
