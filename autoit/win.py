@@ -381,7 +381,7 @@ def win_menu_select_item(title, *items, **kwargs):
     if not (0 < len(items) < 8):
         raise ValueError("accepted none item or number of items exceed eight")
     f_items = [LPCWSTR(item) for item in items]
-    for i in xrange(8 - len(f_items)):
+    for i in range(8 - len(f_items)):
         f_items.append(LPCWSTR(""))
 
     ret = AUTO_IT.AU3_WinMenuSelectItem(LPCWSTR(title), LPCWSTR(text),
@@ -400,7 +400,7 @@ def win_menu_select_item_by_handle(handle, *items):
     if not (0 < len(items) < 8):
         raise ValueError("accepted none item or number of items exceed eight")
     f_items = [LPCWSTR(item) for item in items]
-    for i in xrange(8 - len(f_items)):
+    for i in range(8 - len(f_items)):
         f_items.append(LPCWSTR(""))
 
     ret = AUTO_IT.AU3_WinMenuSelectItemByHandle(HWND(handle), *f_items)
