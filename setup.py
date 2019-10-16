@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 try:
@@ -17,7 +16,7 @@ setup(
     url='https://github.com/jacexh/pyautoit',
     license='MIT',
     author='Jace Xu',
-    author_email='jace@xuh.me',
+    author_email='jace.xh@gmail.com',
     description='Python binding for AutoItX3.dll',
     classifiers=[
         "Development Status :: 5 - Production/Stable",
