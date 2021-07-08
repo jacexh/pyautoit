@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'Jace Xu'
-__version__ = "0.6.0"
+__version__ = "0.6.4"
 
 from .autoit import options, properties, commands
 from .autoit import AutoItError
