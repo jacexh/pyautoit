@@ -32,7 +32,6 @@ jobs:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
     steps:
       - uses: actions/checkout@v2
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
