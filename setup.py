@@ -4,13 +4,17 @@ try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
-
-import autoit
+import re
 import os
+
+
+with open("autoit/__init__.py", 'r') as f:
+    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
+                        f.read(), re.MULTILINE).group(1)
 
 setup(
     name='PyAutoIt',
-    version=autoit.__version__,
+    version=version,
     packages=['autoit'],
     package_data={'': ['lib\\*.dll']},
     url='https://github.com/jacexh/pyautoit',
