@@ -16,7 +16,7 @@ setup(
     name='PyAutoIt',
     version=version,
     packages=['autoit'],
-    package_data={'': ['lib\\*.dll']},
+    package_data={'autoit': ['lib/*.dll']},
     url='https://github.com/jacexh/pyautoit',
     license='MIT',
     author='Jace Xu',
